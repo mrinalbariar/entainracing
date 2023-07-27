@@ -95,7 +95,8 @@ func (m *racesRepo) scanRaces(
 	for rows.Next() {
 		var race racing.Race
 		var advertisedStart time.Time
-
+		//Added the below variable to compare with advertisedStartDateTime
+		t := time.Now()
 		if err := rows.Scan(&race.Id, &race.MeetingId, &race.Name, &race.Number, &race.Visible, &advertisedStart); err != nil {
 			if err == sql.ErrNoRows {
 				return nil, nil
@@ -110,7 +111,12 @@ func (m *racesRepo) scanRaces(
 		}
 
 		race.AdvertisedStartTime = ts
-
+		//Below logic checks if the advertisedDateTime is before/after the current time as per which it will set the derived status field
+		if t.After(advertisedStart) {
+			race.Status = "CLOSED"
+		} else {
+			race.Status = "OPEN"
+		}
 		races = append(races, &race)
 	}
 
