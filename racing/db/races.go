@@ -54,10 +54,6 @@ func (r *racesRepo) List(filter *racing.ListRacesRequestFilter) ([]*racing.Race,
 
 	query, args = r.applyFilter(query, filter)
 
-	if filter.Visible {
-		query = getVisibleRacesQuery()[racesList]
-	}
-
 	rows, err := r.db.Query(query, args...)
 	if err != nil {
 		return nil, err
