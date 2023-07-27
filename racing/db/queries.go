@@ -15,6 +15,7 @@ func getRaceQueries() map[string]string {
 				visible, 
 				advertised_start_time 
 			FROM races
+   			ORDER BY advertised_start_time
 		`,
 	}
 }
