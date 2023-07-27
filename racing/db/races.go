@@ -54,6 +54,10 @@ func (r *racesRepo) List(filter *racing.ListRacesRequestFilter) ([]*racing.Race,
 
 	query, args = r.applyFilter(query, filter)
 
+	if filter.Visible {
+		query = getVisibleRacesQuery()[racesList]
+	}
+
 	rows, err := r.db.Query(query, args...)
 	if err != nil {
 		return nil, err
@@ -78,6 +82,10 @@ func (r *racesRepo) applyFilter(query string, filter *racing.ListRacesRequestFil
 		for _, meetingID := range filter.MeetingIds {
 			args = append(args, meetingID)
 		}
+	}
+	//Check if the filter added is visible and return the appropriate query
+	if filter.Visible {
+		query == getVisibleRacesQuery()[racesList]
 	}
 
 	if len(clauses) != 0 {
