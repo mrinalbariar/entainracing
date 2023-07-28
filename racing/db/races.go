@@ -81,7 +81,7 @@ func (r *racesRepo) applyFilter(query string, filter *racing.ListRacesRequestFil
 	}
 	//Check if the filter added is visible and return the appropriate query
 	if filter.Visible {
-		query == getVisibleRacesQuery()[racesList]
+		query = getVisibleRacesQuery()[racesList]
 	}
 
 	if len(clauses) != 0 {
