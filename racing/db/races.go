@@ -19,6 +19,8 @@ type RacesRepo interface {
 
 	// List will return a list of races.
 	List(filter *racing.ListRacesRequestFilter) ([]*racing.Race, error)
+	// Get will fetch the race by id
+	Get(id int64) (*racing.Race, error)
 }
 
 type racesRepo struct {
@@ -115,4 +117,29 @@ func (m *racesRepo) scanRaces(
 	}
 
 	return races, nil
+}
+
+// Below function fetches the race by Id
+func (r *racesRepo) Get(id int64) (*racing.Race, error) {
+	var raceById *racing.Race
+	var race racing.Race
+	var advertisedStart time.Time
+	// Query for a value based on a single row.
+	if err := r.db.QueryRow("SELECT * from races where id = ?", id).Scan(&race.Id, &race.MeetingId, &race.Name, &race.Number, &race.Visible, &advertisedStart); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	ts, err := ptypes.TimestampProto(advertisedStart)
+	if err != nil {
+		return nil, err
+	}
+
+	race.AdvertisedStartTime = ts
+
+	raceById = &race
+
+	return raceById, err
 }
