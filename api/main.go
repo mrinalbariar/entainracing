@@ -12,8 +12,9 @@ import (
 )
 
 var (
-	apiEndpoint  = flag.String("api-endpoint", "localhost:8000", "API endpoint")
-	grpcEndpoint = flag.String("grpc-endpoint", "localhost:9000", "gRPC server endpoint")
+	apiEndpoint        = flag.String("api-endpoint", "localhost:8000", "API endpoint")
+	grpcEndpoint       = flag.String("grpc-endpoint", "localhost:9000", "gRPC server endpoint")
+	grpcSportsEndpoint = flag.String("grpc-sports-endpoint", "localhost:7000", "gRPC sports server endpoint")
 )
 
 func main() {
